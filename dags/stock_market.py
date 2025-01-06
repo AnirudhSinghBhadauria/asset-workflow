@@ -1,6 +1,8 @@
 from airflow.decorators import dag, task
 from airflow.operators.python import PythonOperator
 from datetime import datetime
+from airflow.sensors.base import PokeReturnValue
+from airflow.hooks.base import BaseHook
 
 def _print_stock_name():
      print("this is the stock name")
@@ -23,6 +25,7 @@ def stock_market():
           mode = 'poke'
      )
      def is_api_available() -> PokeReturnValue:
-          pass
-          
+          # We create this "stock_api" connection in metadatabase of the airflow,
+          api = BaseHook.get_connection("stock_api")
+               
 stock_market()
