@@ -5,7 +5,8 @@ from airflow.decorators import dag, task
 from airflow.sensors.base import PokeReturnValue
 from airflow.operators.python import PythonOperator
 from include.stock_market.tasks import (
-     _get_stock_prices
+     _get_stock_prices, 
+     _store_prices
 )
 
 SYMBOL = 'AAPL'
@@ -38,7 +39,7 @@ def stock_market():
                xcom_value=url
           )
      
-     sensor_task = is_api_available()
+     api_available = is_api_available()
      
      get_stock_prices = PythonOperator(
           task_id = 'get_stock_prices',
@@ -49,7 +50,16 @@ def stock_market():
                'symbol': SYMBOL
           }
      )
+     
+     store_prices = PythonOperator(
+          task_id = 'store_prices',
+          python_callable = _store_prices,
+          op_kwargs = {
+               # We are passing this stock to the callable python function
+               'stock': '{{ task_instance.xcom_pull(task_ids="get_stock_prices") }}'
+          }
+     )
                
-     sensor_task >> get_stock_prices
+     api_available >> get_stock_prices >> store_prices
                
 stock_market()
