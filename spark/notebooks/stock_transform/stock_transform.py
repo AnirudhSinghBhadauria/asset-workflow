@@ -56,3 +56,6 @@ if __name__ == '__main__':
 
     app()
     os.system('kill %d' % os.getpid())
+    
+    
+# os.getenv('SPARK_APPLICATION_ARGS') -> this is the path to the json file stored in minio!

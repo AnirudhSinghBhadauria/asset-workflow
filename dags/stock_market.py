@@ -4,6 +4,7 @@ from airflow.hooks.base import BaseHook
 from airflow.decorators import dag, task
 from airflow.sensors.base import PokeReturnValue
 from airflow.operators.python import PythonOperator
+from ariflow.providers.docker.operator.docker import DockerOperator
 from include.stock_market.tasks import (
      _get_stock_prices, 
      _store_prices
