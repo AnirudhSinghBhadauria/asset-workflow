@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from airflow.operators.python import PythonOperator
 from include.scheduling.tasks import _task_dependency
 
+
 def on_success(dict):
      print(dict)
 
