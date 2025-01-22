@@ -4,6 +4,7 @@ from airflow.hooks.base import BaseHook
 from minio import Minio
 from io import BytesIO
 from airflow.exceptions import AirflowNotFoundException
+from datetime import datetime, timezone, timedelta
 
 BUCKET_NAME = 'stock-market'
 
@@ -69,3 +70,7 @@ def _get_formatted_csv(path):
           "The csv file doesn't exist!"
      )               
 
+def format_timestamps(timestamp: int):
+     dt_utc = datetime.fromtimestamp(timestamp/1000, timezone.utc)
+     dt_ist = dt_utc.astimezone(timezone(timedelta(hours=5, minutes=30)))
+     return dt_ist.strftime("%Y-%m-%d %H:%M:%S")
